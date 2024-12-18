@@ -37,7 +37,7 @@ app.post('/submit-survey', async (req, res) => {
         });
 
         const data = await response.json();
-        res.json(data);
+        res.json(data);  // Ensure you return valid JSON response
     } catch (error) {
         console.error(error);
         res.status(500).send('Error processing survey.');

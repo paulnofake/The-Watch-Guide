@@ -146,7 +146,7 @@
             userInputs.materials = formData.getAll('materials');
             userInputs.functions = formData.getAll('functions');
 
-            const response = await fetch('https://peaceful-bublanina-918621.netlify.app', {
+            const response = await fetch('http://localhost:3000/submit-survey', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
