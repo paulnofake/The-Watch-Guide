@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Perfect Watch Finder Survey</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            padding: 20px;
+            max-width: 800px;
+            margin: auto;
+            background-color: #f9f9f9;
+            color: #333;
+        }
+        h1, h2 {
+            text-align: center;
+        }
+        form {
+            margin-bottom: 20px;
+        }
+        label {
+            font-weight: bold;
+            display: block;
+            margin: 10px 0 5px;
+        }
+        select, input, textarea, button {
+            display: block;
+            margin: 10px 0;
+            padding: 10px;
+            width: 100%;
+        }
+        input[type="checkbox"], input[type="radio"] {
+            display: inline-block;
+            width: auto;
+            margin-right: 5px;
+        }
+        button {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        #results {
+            padding: 15px;
+            background: #fff;
+            border: 1px solid #ddd;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Perfect Watch Finder Survey</h1>
+    <p>Answer the following questions to find the ideal watch tailored to your preferences!</p>
+    <form id="watch-survey" onsubmit="submitSurvey(event)">
+        <!-- Section 1: Personal Style Preferences -->
+        <h2>Section 1: Personal Style Preferences</h2>
+        <label for="style">How would you describe your everyday style?</label>
+        <select id="style" name="style" required>
+            <option value="casual">Casual and laid-back</option>
+            <option value="professional">Professional and business-like</option>
+            <option value="trendy">Trendy and fashion-forward</option>
+            <option value="minimalist">Minimalist and timeless</option>
+            <option value="adventurous">Adventurous and sporty</option>
+        </select>
+
+        <label>Which materials do you prefer in accessories or jewelry?</label>
+        <input type="checkbox" name="materials" value="metal"> Metal (e.g., stainless steel, gold, titanium)<br>
+        <input type="checkbox" name="materials" value="leather"> Leather<br>
+        <input type="checkbox" name="materials" value="fabric"> Fabric or nylon straps<br>
+        <input type="checkbox" name="materials" value="rubber"> Rubber or silicone<br>
+        <input type="checkbox" name="materials" value="eco"> Eco-friendly or sustainable materials<br>
+
+        <label>What color palette do you gravitate towards?</label>
+        <input type="radio" name="colors" value="neutral" required> Neutral tones (black, white, silver, gray)<br>
+        <input type="radio" name="colors" value="warm"> Warm tones (gold, rose gold, bronze)<br>
+        <input type="radio" name="colors" value="cool"> Cool tones (blue, green, icy silver)<br>
+        <input type="radio" name="colors" value="bright"> Bright and bold colors<br>
+        <input type="radio" name="colors" value="mixed"> Mixed or colorful designs<br>
+
+        <!-- Section 2: Lifestyle and Usage -->
+        <h2>Section 2: Lifestyle and Usage</h2>
+        <label>What activities do you usually engage in?</label>
+        <select name="activities" required>
+            <option value="office">Office work or professional settings</option>
+            <option value="outdoor">Outdoor adventures or sports</option>
+            <option value="social">Social events and gatherings</option>
+            <option value="fitness">Fitness or athletic training</option>
+            <option value="travel">Travel or frequent commuting</option>
+        </select>
+
+        <label>Do you need your watch to be water-resistant?</label>
+        <select name="water_resistance" required>
+            <option value="no">No, not necessary</option>
+            <option value="splash">Yes, resistant to splashes or rain</option>
+            <option value="swimming">Yes, suitable for swimming or snorkeling</option>
+            <option value="diving">Yes, suitable for diving (100m+ water resistance)</option>
+        </select>
+
+        <label>What functions are essential for your watch?</label>
+        <input type="checkbox" name="functions" value="timekeeping"> Basic timekeeping<br>
+        <input type="checkbox" name="functions" value="date"> Date display<br>
+        <input type="checkbox" name="functions" value="chronograph"> Chronograph (stopwatch)<br>
+        <input type="checkbox" name="functions" value="smart"> Smartwatch features (notifications, health tracking)<br>
+        <input type="checkbox" name="functions" value="gps"> GPS or navigation<br>
+
+        <!-- Section 3: Budget and Value -->
+        <h2>Section 3: Budget and Value</h2>
+        <label>What is your budget range for a watch?</label>
+        <select name="budget" required>
+            <option value="under-100">Under $100</option>
+            <option value="100-300">$100 - $300</option>
+            <option value="300-1000">$300 - $1,000</option>
+            <option value="1000-5000">$1,000 - $5,000</option>
+            <option value="5000+">Over $5,000</option>
+        </select>
+
+        <label>Do you value brand prestige or heritage?</label>
+        <input type="radio" name="prestige" value="yes" required> Yes, I want a renowned luxury or heritage brand<br>
+        <input type="radio" name="prestige" value="no"> No, functionality and design are more important<br>
+
+        <label>How often do you plan to wear this watch?</label>
+        <select name="usage" required>
+            <option value="daily">Daily</option>
+            <option value="occasionally">Occasionally for special events</option>
+            <option value="specific">Only during specific activities (e.g., fitness, diving)</option>
+        </select>
+
+        <!-- Submit -->
+        <button type="submit">Find My Watch</button>
+    </form>
+
+    <div id="results"></div>
+
+    <script>
+        async function submitSurvey(event) {
+            event.preventDefault();
+            const form = document.getElementById('watch-survey');
+            const formData = new FormData(form);
+
+            const userInputs = Object.fromEntries(formData.entries());
+            userInputs.materials = formData.getAll('materials');
+            userInputs.functions = formData.getAll('functions');
+
+            const response = await fetch('https://api.openai.com/v1/chat/completions', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': 'Bearer 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'
+                },
+                body: JSON.stringify({
+                    model: 'gpt-4',
+                    messages: [
+                        {
+                            role: 'system',
+                            content: 'You are a watch recommendation engine. Provide the top 5 watches with brief descriptions and short histories based on the input survey.'
+                        },
+                        {
+                            role: 'user',
+                            content: `Here are the survey responses: ${JSON.stringify(userInputs)}.`
+                        }
+                    ]
+                })
+            });
+
+            const result = await response.json();
+            const recommendations = result.choices[0].message.content;
+
+            document.getElementById('results').innerHTML = `<h2>Your Top 5 Watches</h2><p>${recommendations}</p>`;
+        }
+    </script>
+</body>
+</html>
