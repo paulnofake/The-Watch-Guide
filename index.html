@@ -146,25 +146,12 @@
             userInputs.materials = formData.getAll('materials');
             userInputs.functions = formData.getAll('functions');
 
-            const response = await fetch('https://api.openai.com/v1/chat/completions', {
+            const response = await fetch('http://localhost:3000/submit-survey', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
-                    'Authorization': 'Bearer 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'
                 },
-                body: JSON.stringify({
-                    model: 'gpt-4',
-                    messages: [
-                        {
-                            role: 'system',
-                            content: 'You are a watch recommendation engine. Provide the top 5 watches with brief descriptions and short histories based on the input survey.'
-                        },
-                        {
-                            role: 'user',
-                            content: `Here are the survey responses: ${JSON.stringify(userInputs)}.`
-                        }
-                    ]
-                })
+                body: JSON.stringify(userInputs)
             });
 
             const result = await response.json();
@@ -172,6 +159,7 @@
 
             document.getElementById('results').innerHTML = `<h2>Your Top 5 Watches</h2><p>${recommendations}</p>`;
         }
+
     </script>
 </body>
 </html>
